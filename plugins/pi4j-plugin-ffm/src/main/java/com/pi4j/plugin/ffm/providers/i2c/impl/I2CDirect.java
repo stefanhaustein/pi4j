@@ -12,6 +12,7 @@ import com.pi4j.plugin.ffm.common.i2c.rdwr.RDWRData;
 import com.pi4j.plugin.ffm.common.ioctl.IoctlNative;
 import com.pi4j.plugin.ffm.providers.i2c.FFMI2CBus;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -191,5 +192,13 @@ public class I2CDirect extends I2CBase<FFMI2CBus> {
     @Override
     public int writeRegister(byte[] register, byte[] data, int offset, int length) {
         return internalWrite(register, data, offset, length);
+    }
+
+    @Override
+    public void writeThenRead(byte[] writeBuffer, int writeOffset, int writeSize, int readDelayNanos, byte[] readBuffer, int readOffset, int readSize) {
+        if (writeSize != writeBuffer.length) {
+            writeBuffer = Arrays.copyOfRange(writeBuffer, writeOffset, writeOffset + writeSize);
+        }
+        readRegister(writeBuffer, readBuffer, readOffset, readSize);
     }
 }

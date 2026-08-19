@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -354,5 +355,13 @@ public class MockI2C extends I2CBase<MockI2CBus> implements I2C, I2CRegisterData
         logger.debug("[{}::{}] :: WRITE(REG={}, 0x{})", Mock.I2C_PROVIDER_NAME, this.id, register, result);
 
         return result;
+    }
+
+    @Override
+    public void writeThenRead(byte[] writeBuffer, int writeOffset, int writeSize, int readDelayNanos, byte[] readBuffer, int readOffset, int readSize) {
+        if (writeSize != writeBuffer.length) {
+            writeBuffer = Arrays.copyOfRange(writeBuffer, writeOffset, writeOffset + writeSize);
+        }
+        readRegister(writeBuffer, readBuffer, readOffset, readSize);
     }
 }

@@ -86,27 +86,6 @@ public interface I2C
         return device();
     }
 
-    /**
-     * Method to write the writeBuffer, and then a read into the readBuffer
-     * in a single atomic operation.
-     *
-     * @param writeBuffer    the buffer to write respecting the given length and offset
-     * @param writeOffset    the offset of the array to write
-     * @param writeSize      the number of bytes to write
-     * @param readDelayNanos delay after writing before reading; currently ignored for i2c.
-     * @param readBuffer     the buffer into which to read the bytes
-     * @param readOffset     the offset in the read buffer at which to insert the read bytes
-     * @param readSize       the number of bytes to read
-     */
-    default void writeThenRead(byte[] writeBuffer, int writeOffset, int writeSize, int readDelayNanos, byte[] readBuffer, int readOffset, int readSize) {
-        // Ideally, new implementations support this call directly.
-        // however, we can emulate it using the multi-byte register call
-        if (writeSize != writeBuffer.length) {
-            writeBuffer = Arrays.copyOfRange(writeBuffer, writeOffset, writeOffset + writeSize);
-        }
-        readRegister(writeBuffer, readBuffer, readOffset, readSize);
-    }
-
     // --------------------
     // Disambiguation
     // ---------------------
