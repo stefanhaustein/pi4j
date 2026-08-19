@@ -6,7 +6,6 @@ import com.pi4j.io.IODataReader;
 import com.pi4j.io.IODataWriter;
 import com.pi4j.io.SerialCircuitIO;
 
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 /**
