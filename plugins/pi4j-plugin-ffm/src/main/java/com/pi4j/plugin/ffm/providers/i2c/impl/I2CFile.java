@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * {@link I2C} implementation that communicates with an I2C device through plain {@code read(2)}/{@code write(2)}
@@ -120,9 +121,18 @@ public class I2CFile extends I2CBase<FFMI2CBus> {
     }
 
     @Override
+    public void writeThenRead(byte[] writeBuffer, int writeOffset, int writeSize, int readDelayNanos, byte[] readBuffer, int readOffset, int readSize) {
+        if (writeSize != writeBuffer.length) {
+            writeBuffer = Arrays.copyOfRange(writeBuffer, writeOffset, writeOffset + writeSize);
+        }
+        readRegister(writeBuffer, readBuffer, readOffset, readSize);
+    }
+
+    @Override
     public I2C shutdownInternal(Context context) throws ShutdownException {
         super.shutdownInternal(context);
         i2CBus.close();
         return this;
     }
+
 }

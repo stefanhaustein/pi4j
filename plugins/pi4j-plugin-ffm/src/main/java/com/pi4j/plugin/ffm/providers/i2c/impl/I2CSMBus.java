@@ -186,4 +186,12 @@ public class I2CSMBus extends I2CBase<FFMI2CBus> {
         i2CBus.close();
         return this;
     }
+
+    @Override
+    public void writeThenRead(byte[] writeBuffer, int writeOffset, int writeSize, int readDelayNanos, byte[] readBuffer, int readOffset, int readSize) {
+        if (writeSize != writeBuffer.length) {
+            writeBuffer = Arrays.copyOfRange(writeBuffer, writeOffset, writeOffset + writeSize);
+        }
+        readRegister(writeBuffer, readBuffer, readOffset, readSize);
+    }
 }
